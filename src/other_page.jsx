@@ -10,10 +10,11 @@ class OtherPage extends React.Component{
   }
 
   render(){
-    return 
+    return (
       <div>
         <Link to='/map'>Return</Link>
       </div>
+    )
   }
 }
 export default OtherPage

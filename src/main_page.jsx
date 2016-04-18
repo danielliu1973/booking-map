@@ -11,13 +11,14 @@ class MainPage extends React.Component{
 
   render(){
     var parent = this
-    return 
+    return (
       <div>
         <hr/>
         <Link to='/map'>Start</Link>&nbsp;&nbsp;&nbsp;&nbsp;
         <Link to='/other'>OtherPage</Link>
         {this.props.children}
       </div>
+    )
   }
 }
 export default MainPage

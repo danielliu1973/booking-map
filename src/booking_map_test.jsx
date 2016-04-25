@@ -19,7 +19,7 @@ class BookingMapTest extends React.Component{
     var parent = this
     return (
       <div className='map-page'>
-        <BookingMap mapCenterLat='-34.397' mapCenterLng='150.644'></BookingMap>
+        <BookingMap></BookingMap>
         <button onClick={e=>{}}>add</button>
     </div>
   )}

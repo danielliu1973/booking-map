@@ -1,19 +1,40 @@
+.transition(@transition) {
+	-webkit-transition: @transition;
+	-moz-transition: @transition;
+	-o-transition: @transition;
+	transition: @transition;
+}
+
 .map-page{
-  width: 90%;
+  width: 100%;
   height: 90%;
   position: absolute;
-  .map{
-	  	width: 90%;
-	  	height: 90%;
+  .booking-map{
+  	width: 100%;
+  	height: 100%;
+  	.actions{
+  		float: left;
 	  }
- //  .booking-map{
- //  	  .info{
-	//   	width: 100px;
-	//   	height: 90%;
-	//   }
-	//   .map{
-	//   	width: 90%;
-	//   	height: 90%;
-	//   }
-	// }
+	  .map{
+	  	// padding: 0px 100px 0px 100px;
+	  	float: left;
+	  	width: 80%;
+			height: 100%;
+			.transition(all 0.5s);
+	  }
+	  .map-hide{
+	  	left: -100%;
+		}
+		.map-show{
+			left: 0px;
+		}
+		.info{
+			float: right;
+			position: absolute;
+  		background-color: lightblue;
+  		width: 200px;
+  		height: 100%;
+  		right: 0px;
+	  }
+	}
 }

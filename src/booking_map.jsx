@@ -5,9 +5,8 @@ class BookingMap extends React.Component{
   constructor(props) {
     super(props)
     this.state={
-      initialZoom: 8,
-      mapCenterLat: 43.77974,
-      mapCenterLng: -79.4073126
+      map_show: false,
+      active_marker: {}
     }
   }
 
@@ -21,43 +20,79 @@ class BookingMap extends React.Component{
   }
 
   componentDidMount(){
-    var map;
+    var parent = this;
     google.maps.event.addDomListener(window, 'load', ()=>{
       var mapOptions = {
-        zoom: 8,
-        center: {lat: 43.77974, lng: -79.41561}
+        zoom: parent.props.data.zoom,
+        center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng}
       };
-      map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      var marker = new google.maps.Marker({
-        position: {lat: 43.77974, lng: -79.41561},
-        map: map
-      });
+      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      parent.props.data.markers.map((e,i)=>{
+        var marker = new google.maps.Marker({
+          position: {lat: e.lat, lng: e.lng},
+          map: map,
+          lots: e.lots,
+          city: e.city
+        });
 
-      var infowindow = new google.maps.InfoWindow({
-        content: '<p>Marker Location:' + marker.getPosition() + '</p>'
-      });
+        var infowindow = new google.maps.InfoWindow({
+          content: '<p>Marker Location:' + marker.getPosition() + '</p>'
+        });
 
-      google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map, marker);
+        google.maps.event.addListener(marker, 'click', function() {
+          // infowindow.open(map, marker);
+          parent.setState({active_marker : marker});
+        });
+        google.maps.event.addListener(marker, 'mouseover', function() {
+          // infowindow.open(map, marker);
+        });
+        // google.maps.event.addListener(marker, 'mouseout', function() {
+        //   infowindow.close();
+        // });
       });
     });
   }
-
-  mapCenterLatLng() {
-    var props = this.props;
-    return new google.maps.LatLng(this.state.mapCenterLat, this.state.mapCenterLng);
-  }
-
   render(){
+    var parent = this;
+    var marker = parent.state.active_marker ;
     return (
-      <div id='map' className='map'>cccc</div>
+      <div className='booking-map'>
+        <div className='actions'><button onClick={e=>{
+          parent.setState({map_show: !parent.state.map_show});
+        }}>Show/Hide</button></div>
+        <div id='map' className={parent.state.map_show?'map map-show':'map map-hide'}></div>
+        <div className='info'>
+        {!!!marker['position'] ? '' : (
+          <div>
+            <div>Lat:</div><div>{marker.getPosition().lat()}</div>
+            <div>Lng:</div><div>{marker.getPosition().lng()}</div>
+            <div>Lots:</div><div>{marker.lots}</div>
+            <div>City:</div><div>{marker.city}</div>
+          </div>
+        )}
+        </div>
+      </div>
     )
   }
 }
 export default BookingMap
 
 BookingMap.propTypes = {
+  data: React.PropTypes.object
 }
 
 BookingMap.defaultProps = {
+  data: {
+    init: {
+      Zoom: 12,
+      CenterLat: 43.77974,
+      CenterLng: -79.4073126
+    },
+    markers: [
+      {
+        Lat: 43.77974,
+        Lng: -79.4073126
+      }
+    ]
+  }
 }

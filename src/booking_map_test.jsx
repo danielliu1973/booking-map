@@ -39,7 +39,7 @@ class BookingMapTest extends React.Component{
                 lng: -79.4573126,
                 lots: 100,
                 city: 'Toronto',
-                address: '170 LEYTON AVE, Toronto, Ontario   M1L3V6',
+                address: '888 Yonge St, Toronto, Ontario   M5L8V2',
                 image: 'https://cdn.realtor.ca/listing/TS635952077306770000/reb82/highres/7/e3453907_1.jpg',
                 price: '$690,000'
               },

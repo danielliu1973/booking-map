@@ -27,8 +27,8 @@ class BookingMap extends React.Component{
         center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng},
         mapTypeControl: true,
         mapTypeControlOptions: {
-          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-          position: google.maps.ControlPosition.TOP_CENTER
+          // style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          // position: google.maps.ControlPosition.TOP_CENTER
         }
       };
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -37,23 +37,24 @@ class BookingMap extends React.Component{
           position: {lat: e.lat, lng: e.lng},
           map: map,
           lots: e.lots,
-          city: e.city
+          city: e.city,
+          address: e.address,
+          image: e.image,
+          price: e.price
         });
 
         var infowindow = new google.maps.InfoWindow({
           content: '<p>Marker Location:' + marker.getPosition() + '</p>'
         });
 
-        google.maps.event.addListener(marker, 'click', function() {
-          // infowindow.open(map, marker);
+        google.maps.event.addListener(marker, 'click', ()=>{});
+        google.maps.event.addListener(marker, 'mouseover', ()=>{
+          infowindow.open(map, marker);
           parent.setState({active_marker : marker});
         });
-        google.maps.event.addListener(marker, 'mouseover', function() {
-          // infowindow.open(map, marker);
+        google.maps.event.addListener(marker, 'mouseout', ()=>{
+          infowindow.close();
         });
-        // google.maps.event.addListener(marker, 'mouseout', function() {
-        //   infowindow.close();
-        // });
       });
     });
   }
@@ -61,18 +62,20 @@ class BookingMap extends React.Component{
     var parent = this;
     var marker = parent.state.active_marker ;
     return (
-      <div className='booking-map'>
-        <div className='actions'><button onClick={e=>{
-          parent.setState({map_show: !parent.state.map_show});
-        }}>Show/Hide</button></div>
-        <div id='map' className={parent.state.map_show?'map map-show':'map map-hide'}></div>
+      <div className={parent.state.map_show?'booking-map map-show':'booking-map map-hide'}>
+        <div className='actions'><button className={parent.state.map_show?'map-show':'map-hide'} 
+          onClick={e=>{parent.setState({map_show: !parent.state.map_show});}}></button></div>
+        <div id='map' className='map'></div>
         <div className='info'>
         {!!!marker['position'] ? '' : (
           <div>
-            <div>Lat:</div><div>{marker.getPosition().lat()}</div>
-            <div>Lng:</div><div>{marker.getPosition().lng()}</div>
+            <div>{marker.address}</div>
+            <div><a><img src={marker.image}></img></a>
+            </div>
             <div>Lots:</div><div>{marker.lots}</div>
             <div>City:</div><div>{marker.city}</div>
+            <div>Price:</div><div>{marker.price}</div>
+            <button>Book</button>
           </div>
         )}
         </div>

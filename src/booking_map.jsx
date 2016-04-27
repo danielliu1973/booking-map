@@ -21,40 +21,39 @@ class BookingMap extends React.Component{
 
   componentDidMount(){
     var parent = this;
-    google.maps.event.addDomListener(window, 'load', ()=>{
-      var mapOptions = {
-        zoom: parent.props.data.zoom,
-        center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng},
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-          // style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-          // position: google.maps.ControlPosition.TOP_CENTER
-        }
-      };
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      parent.props.data.markers.map((e,i)=>{
-        var marker = new google.maps.Marker({
-          position: {lat: e.lat, lng: e.lng},
-          map: map,
-          lots: e.lots,
-          city: e.city,
-          address: e.address,
-          image: e.image,
-          price: e.price
-        });
+    var mapOptions = {
+      zoom: parent.props.data.zoom,
+      center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng},
+      mapTypeControl: true,
+      mapTypeControlOptions: {
+        // style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        // position: google.maps.ControlPosition.TOP_CENTER
+      }
+    };
+    var map = new google.maps.Map(parent.refs['map'], mapOptions);
+    parent.props.data.markers.map((e,i)=>{
+      var marker = new google.maps.Marker({
+        position: {lat: e.lat, lng: e.lng},
+        map: map,
+        lots: e.lots,
+        city: e.city,
+        address: e.address,
+        image: e.image,
+        price: e.price
+      });
 
-        var infowindow = new google.maps.InfoWindow({
-          content: '<p>Marker Location:' + marker.getPosition() + '</p>'
-        });
+      var infowindow = new google.maps.InfoWindow({
+        content: '<p>Marker Location:' + marker.getPosition() + '</p>' +
+                 '<div><a><img src=' + marker.image + ' height="180" width="180"></img></a></div>'
+      });
 
-        google.maps.event.addListener(marker, 'click', ()=>{});
-        google.maps.event.addListener(marker, 'mouseover', ()=>{
-          infowindow.open(map, marker);
-          parent.setState({active_marker : marker});
-        });
-        google.maps.event.addListener(marker, 'mouseout', ()=>{
-          infowindow.close();
-        });
+      google.maps.event.addListener(marker, 'click', ()=>{});
+      google.maps.event.addListener(marker, 'mouseover', ()=>{
+        infowindow.open(map, marker);
+        parent.setState({active_marker : marker});
+      });
+      google.maps.event.addListener(marker, 'mouseout', ()=>{
+        infowindow.close();
       });
     });
   }
@@ -62,10 +61,10 @@ class BookingMap extends React.Component{
     var parent = this;
     var marker = parent.state.active_marker ;
     return (
-      <div className={parent.state.map_show?'booking-map map-show':'booking-map map-hide'}>
-        <div className='actions'><button className={parent.state.map_show?'map-show':'map-hide'} 
+      <div className={parent.state.map_show ? 'booking-map map-show' : 'booking-map map-hide'}>
+        <div className='actions'><button className={parent.state.map_show ? 'map-show' : 'map-hide'} 
           onClick={e=>{parent.setState({map_show: !parent.state.map_show});}}></button></div>
-        <div id='map' className='map'></div>
+        <div ref='map' id='map' className='map'></div>
         <div className='info'>
         {!!!marker['position'] ? '' : (
           <div>

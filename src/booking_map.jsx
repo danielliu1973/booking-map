@@ -24,7 +24,12 @@ class BookingMap extends React.Component{
     google.maps.event.addDomListener(window, 'load', ()=>{
       var mapOptions = {
         zoom: parent.props.data.zoom,
-        center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng}
+        center: {lat: parent.props.data.center_lat, lng: parent.props.data.center_lng},
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.TOP_CENTER
+        }
       };
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
       parent.props.data.markers.map((e,i)=>{
